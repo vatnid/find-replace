@@ -16,14 +16,18 @@ in_text = args.in_text
 out_text = args.out_text
 
 
+# Check if output file already exists
+if out_text.exists():
+    print(f"ERROR: {out_text.name} already exists!")
+    sys.exit(1)
+
+
 # Read rules
 rules = []
 with open(in_rules, encoding="UTF8") as f:
     csv_reader = csv.reader(f, delimiter=",")
     for row in csv_reader:
-        try:
-            assert len(row) == 2
-        except AssertionError:
+        if len(row) != 2:
             print("ERROR: Make sure the rules list only has 2 columns!")
             sys.exit(1)
         old = re.sub(r"\ufeff", r"", row[0])
